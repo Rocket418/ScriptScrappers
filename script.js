@@ -12,14 +12,14 @@ async function reorganize(){
     const dePol = 'http://localhost:5000/dePol';
     const infoScrapper = await call(dePol)
     const scraps = []
+    let counter= 0;
+    let answerCounter = 0;
     const Category = {
         basico:[],
         intermedio:[],
         alto:[],
     }
-    const fixedAnswer = [
-        
-    ]
+    const fixedAnswers = []
     if(infoScrapper.length===4){
         for (infoscrap of infoScrapper){
             scraps.push(infoscrap)
@@ -43,39 +43,63 @@ async function reorganize(){
                                 }
                                 for(items in test){
                                     for(item of test[items]){
-                                            if(item.question && item.answers && item.rightanswer){
-                                                /* const cleanText = strInputCode.replace(/<\/?[^>]+(>|$)/g, "") */
+                                        counter= counter + 1
+
+                                        
+                                        if(item.question && item.answers && item.rightanswer){
                                                 const answerObject = {
-                                                question: '',
-                                                answers: [],
-                                                rightAnswer: '',
-                                                feedback: '',
-                                            }   
-                                            answerObject.question = item.question.replace(/<\/?[^>]+(>|$)/g, "")
-                                            answerObject.rightAnswer = item.rightanswer.replace(/<\/?[^>]+(>|$)/g, "")
-                                            answerObject.feedback = item.feedBack.replace(/<\/?[^>]+(>|$)/g, "").replaceAll('\n', '').replaceAll('&nbsp;', '')
-                                            for (answer of item.answers){
-                                                answerObject.answers.push(answer.replaceAll('\n', '').replaceAll('a.', '').replaceAll('b.', '').replaceAll('c.', ''))
-                                            }
-                                            console.log(answerObject)
-                                        }
-                                        break
+                                                        question: '',
+                                                        answers: [],
+                                                        rightAnswer: '',
+                                                        feedback: '',
+                                                        id: counter
+                                                }
+                                                
+                                                answerObject.question = item.question.replace(/<\/?[^>]+(>|$)/g, "")
+                                                answerObject.feedback = item.feedBack.replace(/<\/?[^>]+(>|$)/g, "").replaceAll('\n', '').replaceAll('&nbsp;', '')
+                                                for (answer of item.answers){
+                                                    
+                                                    answerCounter = answerCounter + 1;
+                                                    const cleanAnswer = { 
+                                                        id: answerCounter,
+                                                        answer: answer.replaceAll('&nbsp;', '').replace(/<\/?[^>]+(>|$)/g, "").replaceAll('\n', '').split('.', )
+                                                    }
+                                                    answerObject.answers.push(cleanAnswer)
+                                                    
+                                                }
+                                                function correctAnswer(){
+                                                    for (string of answerObject.answers){
+                                                        if(!!item.rightanswer.toString().includes(string.answer[1].toString()) /* && answerObject.answers.length> */){
+                                                            return string.id
+                                                        }
+                                                    }
+                                                        
+                                                }
+                                                
+                                                answerObject.rightAnswer = correctAnswer()
+                                                fixedAnswers.push({
+                                                    Origin: items,
+                                                    Answer: answerObject
+                                                    })
+                                        
+                                        /* break */
                                     }
-                                    break
+                                    /* break */
                                 }
                                 
-                                break
+                                /* break */
                         }
-                        break
+                        /* break */
                     }
-                    break
+                    /* break */
                 }
-                break
+                /* break */
             }
-            break
+           /*  break */
         }
     }
-    /* console.log(Category) */
+    
 }
-
+console.log(fixedAnswers)
+}
 reorganize()
