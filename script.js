@@ -1,3 +1,5 @@
+const fs= require('fs');
+
 
 async function call(police){
     return fetch(police)
@@ -35,17 +37,15 @@ async function reorganize(){
                                 const test = themes[theme][i]
                                 let indexof = Object.keys(test)
                                 if(indexof[0].includes('INTRO') || indexof[0].includes('NIVEL 1')){
-                                    Category.basico.push(test) 
+                                    Category.basico.push(indexof) 
                                 } else if(indexof[0].includes('NIVEL 2') || indexof[0].includes('NIVEL 3')){
-                                    Category.intermedio.push(test)
+                                    Category.intermedio.push(indexof)
                                 } else if(indexof[0].includes('NIVEL 4')){
-                                    Category.alto.push(test)
+                                    Category.alto.push(indexof)
                                 }
                                 for(items in test){
                                     for(item of test[items]){
                                         counter= counter + 1
-
-                                        
                                         if(item.question && item.answers && item.rightanswer){
                                                 const answerObject = {
                                                         question: '',
@@ -69,37 +69,38 @@ async function reorganize(){
                                                 }
                                                 function correctAnswer(){
                                                     for (string of answerObject.answers){
-                                                        if(!!item.rightanswer.toString().includes(string.answer[1].toString()) /* && answerObject.answers.length> */){
+                                                        if(!!item.rightanswer.toString().includes(string.answer[1].toString())){
                                                             return string.id
                                                         }
                                                     }
                                                         
                                                 }
-                                                
                                                 answerObject.rightAnswer = correctAnswer()
                                                 fixedAnswers.push({
                                                     Origin: items,
                                                     Answer: answerObject
-                                                    })
-                                        
-                                        /* break */
+                                                    }
+                                                )
                                     }
-                                    /* break */
                                 }
-                                
-                                /* break */
                         }
-                        /* break */
                     }
-                    /* break */
                 }
-                /* break */
             }
-           /*  break */
         }
     }
-    
+    const completeResponse = {Category, fixedAnswers}
+    fs.writeFile('reorganicedScrapper.json', JSON.stringify(completeResponse), (err) => 
+    {
+        if (err){
+            console.log(err);
+        } else {
+            console.log('file written successfully');
+        }
+    }
+    )
 }
-console.log(fixedAnswers)
 }
+
 reorganize()
+
