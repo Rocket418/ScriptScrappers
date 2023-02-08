@@ -1,5 +1,4 @@
 const fs= require('fs');
-const { hasUncaughtExceptionCaptureCallback } = require('process');
 
 
 async function call(police){
@@ -41,7 +40,6 @@ async function reorganize(){
                                 for(items in test){
                                     for(item of test[items]){
                                         counter= counter + 1
-                                        if(item.question && item.answers && item.rightanswer){
                                                 const answerObject = {
                                                         question: '',
                                                         answers: [],
@@ -75,7 +73,6 @@ async function reorganize(){
                                                     Answer: answerObject
                                                     }
                                                 )
-                                    }
                                 }
                         }
                         if(indexof[0].includes('INTRO') || indexof[0].includes('NIVEL 1')){
@@ -111,6 +108,17 @@ async function reorganize(){
                             }
                             }
                             
+                        } else {
+                            for (fixedAnswer in fixedAnswers){
+                                if(indexof[0] === fixedAnswers[fixedAnswer].Origin){
+                                let index = {
+                                Origin: indexof,
+                                Preguntas: []
+                                }
+                                index.Preguntas.push(fixedAnswers[fixedAnswer].Answer)
+                                Category.basico.push(index) 
+                            }
+                            }
                         }
                     }
                 }
@@ -136,6 +144,42 @@ else if(infoScrapper.length === 3){
             /*Titulo del tema*/
             scraps[0][scrapThemes].map(function(x){
                 for (difficulty in x){
+                    for (topic of x[difficulty]){
+                        counter=counter+1
+                        const answerObject = {
+                            question: '',
+                            answers: [],
+                            rightAnswer: '',
+                            feedback: '',
+                            id: counter
+                        }
+                        let realQuestion=topic.question.replace(/<\/?[^>]+(>|$)/g, "").split('-',)
+                        answerObject.question = realQuestion[1]
+                        answerObject.feedback = topic.feedBack.replace(/<\/?[^>]+(>|$)/g, "").replaceAll('\n', '').replaceAll('&nbsp;', '')
+                        for (answer of topic.answers){
+                                                        
+                            answerCounter = answerCounter + 1;
+                            const cleanAnswer = { 
+                                id: answerCounter,
+                                answer: answer.replaceAll('&nbsp;', '').replace(/<\/?[^>]+(>|$)/g, "").replaceAll('\n', '').split('.', )
+                            }
+                            answerObject.answers.push(cleanAnswer)
+                        }
+                        function correctAnswer(){
+                            for (string of answerObject.answers){
+                                if(!!topic.rightanswer.toString().includes(string.answer[1].toString())){
+                                    return string.id
+                                }
+                            }
+                        }
+                        answerObject.rightAnswer = correctAnswer()
+                        fixedAnswers.push({
+                            Origin: scrapThemes,
+                            Answer: answerObject
+                            }
+                        )
+                        console.log(answerObject)
+                    }
                     if (difficulty.includes('Fácil')){
                         Category.basico.push(x[difficulty])
                     }else if(difficulty.includes('Normal')){
@@ -143,11 +187,13 @@ else if(infoScrapper.length === 3){
                     }else{
                         Category.alto.push(x[difficulty])
                     }
-                    console.log(x[difficulty])
                 } 
             })
             
         }
+
+
+
     }
 }
 }
