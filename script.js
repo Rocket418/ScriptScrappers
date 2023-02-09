@@ -178,8 +178,8 @@ async function reorganize()  {
                             }
                             )
                         }
-                        if (scraps[1] == undefined) {
                             if (difficulty.includes('Fácil')) {
+                                console.log('soy facil')
                                 for (fixedAnswer in fixedAnswers) {
                                     if (difficulty === fixedAnswers[fixedAnswer].Origin) {
                                         let index = {
@@ -199,7 +199,10 @@ async function reorganize()  {
                                         Category.intermedio.push(index)
                                     }
                                 }
+                                console.log(fixedAnswers[fixedAnswer].Origin)
+                                console.log(fixedAnswers[fixedAnswer].Answer)
                             } else if (difficulty.includes('Dificil') || difficulty.includes('Difícil')) {
+                                console.log('soy dificil')
                                 for (fixedAnswer in fixedAnswers) {
                                     if (difficulty === fixedAnswers[fixedAnswer].Origin) {
                                         let index = {
@@ -210,33 +213,23 @@ async function reorganize()  {
                                     }
                                 }
                             } else {
+                                console.log('soy indefinido')
                                 for (fixedAnswer in fixedAnswers) {
                                     if (difficulty === fixedAnswers[fixedAnswer].Origin) {
                                         let index = {
                                             Origin: difficulty,
                                             Preguntas: fixedAnswers[fixedAnswer].Answer
                                         }
-                                        Category.basico.push(index)
+                                        Category.unsorted.push(index)
                                     }
                                 }
                             }
-                        }
                     }
                 })
-                if (scraps[1] != undefined) {
-                    for (fixedAnswer in fixedAnswers) {
-                        if (difficulty === fixedAnswers[fixedAnswer].Origin) {
-                            let index = {
-                                Origin: difficulty,
-                                Preguntas: fixedAnswers[fixedAnswer].Answer
-                            }
-                            Category.unsorted.push(index)
-                        }
-                    }
-                }
-                
             }
+            
         }
+        
         const completeResponse = Category
         fs.writeFile('reorganicedScrapperofiPol.json', JSON.stringify(completeResponse), (err) => {
             if (err) {
