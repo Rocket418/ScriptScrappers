@@ -1,34 +1,35 @@
 const fs = require('fs');
 
 
-async function call(police) {
+async function call(police)  {
     return fetch(police)
         .then((response) => response.json())
-        .then((scrapped) => { return scrapped })
+        .then((scrapped) => {  return scrapped  })
         .catch((error) => console.log('Error al hacer el fetch', error));
 };
 
 
 
-async function reorganize() {
+async function reorganize()  {
     const dePol = 'http://localhost:5000/dePol';
     const ofiPol = 'http://localhost:5000/ofiPol';
     const infoScrapper = await call(ofiPol)
     const scraps = []
-    let counter = 0;
+    let counter  = 0;
     let answerCounter = 0;
     const Category = {
         unsorted2: [],
         unsorted: [],
-        basico: [],
-        intermedio: [],
-        alto: [],
+        unsorted: [],
+        basico:  [],
+        intermedio:  [],
+        alto:  [],
     }
     const fixedAnswers = []
     if (infoScrapper.length === 4) {
         for (infoscrap of infoScrapper) {
             scraps.push(infoscrap)
-            if (scraps[3] && !scraps[3]['SIMULACROS 2022 EN PROCESO DE ACTUALIZACIÓN'].length) {
+            if  (scraps[3] && !scraps[3]['SIMULACROS 2022 EN PROCESO DE ACTUALIZACIÓN'].length)  {
                 scraps.pop()
             }
         }
@@ -125,9 +126,7 @@ async function reorganize() {
                         }
                     }
                 }
-            }
-        }
-
+            }            
         const completeResponse = Category
         fs.writeFile('reorganicedScrapperdePol.json', JSON.stringify(completeResponse), (err) => {
             if (err) {
@@ -138,7 +137,7 @@ async function reorganize() {
         }
         )
     }
-    else if (infoScrapper.length === 3) {
+}else if (infoScrapper.length === 3) {
         for (infoScrap of infoScrapper) {
             scraps.push(infoScrap)
             for (scrapThemes in infoScrap) {
@@ -238,7 +237,6 @@ async function reorganize() {
                 
             }
         }
-        console.log(Category.basico[0].Preguntas.answers[0].answer)
         const completeResponse = Category
         fs.writeFile('reorganicedScrapperofiPol.json', JSON.stringify(completeResponse), (err) => {
             if (err) {
@@ -249,7 +247,7 @@ async function reorganize() {
         }
         )
     }
-    
+
 }
 
 
