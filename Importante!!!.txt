@@ -1,0 +1,1 @@
+debido al tamaño de los scrappers reorganizados (aprox 150mb) github no me deja subirlos al repo. Para obtener alguno en especifico simplemente ejecutar el codigo cambiando la referencia en la linea 16 dentro de script.js. (antes ejecutar el server.js)
