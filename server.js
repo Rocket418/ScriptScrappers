@@ -16,24 +16,25 @@ app.use(function(req, res, next) {
 });
 
 app.get("/dePol", function(req, res) {
-    res.send(dePol);
+    res.status(200).json(dePol);
 });
 
 app.get("/ofiPol", function(req, res){
-    res.send(ofiPol)
+    res.status(200).json(ofiPol);
 })
 
 app.get("/acraPol1", function(req, res){
-    res.send(acraPol1)
+    console.log('acrapol1', acraPol1);
+    res.status(200).json(acraPol1);
 })
 
 app.get("/acraPol2", function(req, res){
-    res.send(acraPol2)
+    res.status(200).json(acraPol2);
 })
 
 app.get("/acraPol3", function(req, res){
-    res.send(acraPol3)
+    res.status(200).json(acraPol3);
 })
+const PORT = 5005;
 
-
-app.listen(5000, () => console.log('listening on port 5000'))
+app.listen(PORT, () => console.log('listening on port', PORT))
