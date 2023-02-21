@@ -1,6 +1,10 @@
 var express = require("express");
-var dePol = require('./dePol.json');
+const dePol = require('./dePol.json');
 const ofiPol = require('./ofiPol.json');
+const acraPol1 = require('./acraPol/tests2.json')
+const acraPol2 =require( './acraPol/tests4.json')
+const acraPol3 = require('./acraPol/tests6.json')
+
 
 var app = express();
 
@@ -18,5 +22,18 @@ app.get("/dePol", function(req, res) {
 app.get("/ofiPol", function(req, res){
     res.send(ofiPol)
 })
+
+app.get("/acraPol1", function(req, res){
+    res.send(acraPol1)
+})
+
+app.get("/acraPol2", function(req, res){
+    res.send(acraPol2)
+})
+
+app.get("/acraPol3", function(req, res){
+    res.send(acraPol3)
+})
+
 
 app.listen(5000, () => console.log('listening on port 5000'))
