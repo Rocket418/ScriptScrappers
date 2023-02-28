@@ -24,7 +24,6 @@ app.get("/ofiPol", function(req, res){
 })
 
 app.get("/acraPol1", function(req, res){
-    console.log('acrapol1', acraPol1);
     res.status(200).json(acraPol1);
 })
 
