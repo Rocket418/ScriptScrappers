@@ -12,6 +12,15 @@ async function call(police) {
         .catch((error) => console.log("Error al hacer el fetch", error));
 }
 
+
+                                            /* !!!This let must be changed in order to change the outcome of the function¡¡¡ */
+
+/* The accepted values are 'acraPol' or anything else for other scrappers than the acraPol one */
+let scrapperOnUse = 'acraPol';
+
+                                            /* !!!This let must be changed in order to change the outcome of the function¡¡¡ */
+
+
 const acraPol = [
     `http://localhost:${PORT}/acraPol1`,
     `http://localhost:${PORT}/acraPol2`,
@@ -26,7 +35,14 @@ const dePol = `http://localhost:${PORT}/dePol`;
 const ofiPol = `http://localhost:${PORT}/ofiPol`;
 
 async function reorganize(variable) {
+
+                                            /* !!!This let must be changed in order to change the outcome of the function¡¡¡ */
+
+/* The accepted values are, for the acraPol one, variable or one of the declared const for dePol or ofiPol */
     let used = variable;
+
+                                            /* !!!This let must be changed in order to change the outcome of the function¡¡¡ */
+
     const infoScrapper = await call(used);
     const scraps = [];
     let counter = 0;
@@ -274,26 +290,9 @@ async function reorganize(variable) {
                     }
                 });
             }
-            const completeResponse = Category;
-            if (used === ofiPol) {
-                fs.writeFile("reorganicedScrapperofiPol.json", JSON.stringify(completeResponse), (err) => {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        console.log("ofiPol file written successfully");
-                    }
-                });
-            } else if (used === dePol) {
-                fs.writeFile("reorganicedScrapperdePol.json", JSON.stringify(completeResponse), (err) => {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        console.log("dePol file written successfully");
-                    }
-                });
-            }
         }
     }
+    const completeResponse = Category;
     if (acraPolScrapped.unsorted.length === 150) {
         fs.writeFile("reorganicedScrapperacraPol.json", JSON.stringify(acraPolScrapped), (err) => {
             if (err) {
@@ -303,12 +302,32 @@ async function reorganize(variable) {
             }
         });
     }
+    else if (used === ofiPol) {
+        fs.writeFile("reorganicedScrapperofiPol.json", JSON.stringify(completeResponse), (err) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("ofiPol file written successfully");
+            }
+        });
+    } else if (used === dePol) {
+        fs.writeFile("reorganicedScrapperdePol.json", JSON.stringify(completeResponse), (err) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("dePol file written successfully");
+            }
+        });
+    }
 }
 
 
-
-for (scrap of acraPol) {
-    reorganize(scrap);
+if (scrapperOnUse === 'acraPol'){
+    for (scrap of acraPol) {
+        reorganize(scrap);
+    }
+} else {
+    reorganize()
 }
 
-/* reorganize(acraPol); */
+
